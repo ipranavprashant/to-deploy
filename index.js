@@ -9,6 +9,14 @@ const userRouter = require("./routers/userRouter");
 const contactRouter = require("./routers/contactRouter");
 const port = process.env.PORT;
 const cors = require('cors');
+const path = require('path');
+
+//accessing front-end static files
+app.use(express.static(path.join(__dirname,"./client/build")));
+
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname,"./client/build/index.html"));
+})
 
 // Enable CORS for all routes
 app.use(cors({
