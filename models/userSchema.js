@@ -28,10 +28,6 @@ const userSchema = new mongoose.Schema({
         // max:10,
         // unique:true
     },
-    profession:{
-        type:String,
-        required:true
-    },
     password:{
         type:String,
         required:true,

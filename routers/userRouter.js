@@ -20,32 +20,31 @@ router.get("/",(req,res)=>{
     res.send("Home Section");
 })
 
-router.post("/register",async(req,res)=>{
-    console.log(req.body);
-    const {name,email,phone,profession,password,confirmpassword}=req.body;
+router.post("/sign-up", async (req, res) => {
+  console.log(req.body);
+  const { name, email, phone, password, confirmpassword } = req.body;
 
-    if(!name || !email || !phone || !profession || !password || !confirmpassword)
-    {
-        res.status(400).send("WARNING : Please enter all the required fields first!");
+  if (!name || !email || !phone || !password || !confirmpassword) {
+    return res.status(400).send("WARNING: Please enter all the required fields first!");
+  }
+
+  try {
+    const userExist = await User.findOne({ email: email });
+    if (userExist) {
+      return res.status(422).send("WARNING: The email is already registered!");
+    } else if (password !== confirmpassword) {
+      return res.status(422).send("Password is not matching");
+    } else {
+      const user = new User({ name, email, phone, password, confirmpassword });
+      await user.save();
+      return res.status(201).send("User registered successfully!");
     }
-    try{
-    const userExist = await User.findOne({email:email});
-    if(userExist){
-        return res.status(422).send("WARNING : The email is already registered!");
-    }
-    else if(password!=confirmpassword){
-        return res.status(422).send("Password is not matching");
-    }
-    else{
-        const user = new User({name:name,email:email,phone:phone,profession:profession,password:password,confirmpassword:confirmpassword});
-        //yha pe
-        await user.save();
-            res.status(201).send("User registered successfully!");
-    }
-}catch(err){
+  } catch (err) {
     console.log(err);
-}
+    return res.status(500).send("Internal Server Error");
+  }
 });
+
 
 router.post('/sign-in',async(req,res)=>{
     try{
