@@ -11,6 +11,10 @@ const registrationRouter = require("./routers/registrationRouter");
 const port = process.env.PORT;
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require("cookie-parser");
+
+// Add this line before your authentication middleware
+app.use(cookieParser());
 
 //accessing front-end static files
 app.use(express.static(path.join(__dirname,"./client/build")));

@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 
 //we will first create a schema
 const userSchema = new mongoose.Schema({
@@ -63,8 +63,8 @@ userSchema.pre("save",async function(next){     //we using normal function becau
 //generating token
 userSchema.methods.generateAuthToken = async function(){
     try{
-        let userToken = jwt.sign({_id:this.id},process.env.SECRET_KEY);                 //jwt.sign(payload,secretOrPrivateKey,[options,callback])
-        this.tokens = this.tokens.concat({token:userToken});
+        let token = jwt.sign({_id:this.id},process.env.SECRET_KEY);                 //jwt.sign(payload,secretOrPrivateKey,[options,callback])
+        this.tokens = this.tokens.concat({token:token});
         await this.save();
         return token;
     }catch(err){

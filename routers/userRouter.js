@@ -1,9 +1,13 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const router = new express.Router();
 const User=require("../models/userSchema");
 const cors = require('cors');
+const authenticate = require('../middleware/authenticate');
+const cookieParser = require("cookie-parser");
+
+// Add this line before your authentication middleware
+router.use(cookieParser());
 
 // Enable CORS for all routes
 router.use(cors({
@@ -11,10 +15,10 @@ router.use(cors({
 }));
 
 //Middleware
-const middleware=(req,res,next)=>{
-    console.log("I am middleware");
-    next();
-}
+// const middleware=(req,res,next)=>{
+//     console.log("I am middleware");
+//     next();
+// }
 
 router.get("/",(req,res)=>{
     res.send("Home Section");
@@ -80,5 +84,25 @@ router.post('/sign-in',async(req,res)=>{
         console.log(err);
     }
 });
+/*-------------------Sign in part ends ----------------------------- */
+
+
+
+//handle other sections which require login
+//right now we just have one such section i.e; studentzone
+
+router.get("/studentzone",authenticate,(req,res)=>{
+  console.log("Hello about us");
+  res.send(req.rootUser);      //sends all the information of the logged in student to the front-end
+});
+
+
+//handle logout
+router.get("/logout",(req,res)=>{
+  res.clearCookie("jwtoken",{path:"/"});
+  res.status(200).send("User Logout");
+});
 
 module.exports = router;
+
+
