@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
             }
         },
     },
+    countryCode:{
+        type:String,
+        required:true
+    },
     phone:{
         type:Number,
         required:true,

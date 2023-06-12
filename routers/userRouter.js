@@ -22,9 +22,9 @@ router.get("/",(req,res)=>{
 
 router.post("/sign-up", async (req, res) => {
   console.log(req.body);
-  const { name, email, phone, password, confirmpassword } = req.body;
+  const { name, email, countryCode, phone, password, confirmpassword } = req.body;
 
-  if (!name || !email || !phone || !password || !confirmpassword) {
+  if (!name || !email || !countryCode || !phone || !password || !confirmpassword) {
     return res.status(400).send("WARNING: Please enter all the required fields first!");
   }
 
@@ -35,7 +35,7 @@ router.post("/sign-up", async (req, res) => {
     } else if (password !== confirmpassword) {
       return res.status(422).send("Password is not matching");
     } else {
-      const user = new User({ name, email, phone, password, confirmpassword });
+      const user = new User({ name, email, countryCode, phone, password, confirmpassword });
       await user.save();
       return res.status(201).send("User registered successfully!");
     }
