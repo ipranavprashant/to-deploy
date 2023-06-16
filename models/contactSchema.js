@@ -13,7 +13,7 @@ const contactSchema = new mongoose.Schema({
     phone:{
         type:Number,
         required:true,
-        min:10,
+        min:15,
         // max:10,
         // unique:true
     },
